@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6" *ngFor="let item of albums">
+    <div class="card mb-5" [ngbTooltip]="item.title">
+      <img [src]="item.cover_medium" class="card-img-top" [alt]="item.title">
+      <div class="card-body">
+        <h5 class="card-title ellipsis">{{item.title}}</h5>
+        <h5 class="card-text">
+          <span class="badge bg-secondary">{{item.release_date | date : 'YYYY'}}</span>
+        </h5>
+      </div>
+    </div>
+  </div>
+</div>

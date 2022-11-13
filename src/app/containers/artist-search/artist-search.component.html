@@ -1,0 +1,23 @@
+<div class="card border-0">
+    <div class="card-header">
+        <app-search-bar (submitSearch)="submitSearch($event)"></app-search-bar>
+    </div>
+
+    <div class="card-body" *ngIf="showArtist">
+        <router-outlet></router-outlet>
+    </div>
+
+    <div class="card-body" *ngIf="!showArtist && this.page">
+        <app-artists-list (selectArtist)="select($event)" [artists]="this.page.data"></app-artists-list>
+        <div class="text-center card-body">
+            <div class="d-inline-block">
+                <ngb-pagination (pageChange)="pageChange($event)" [(page)]="request.page" [pageSize]="request.limit"
+                    [collectionSize]="page.total"></ngb-pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" *ngIf="!showArtist && !this.page">
+        <h5 class="pt-5 pb-5">Use the search box above to Search for Artists <i class="bi bi-hand-index"></i></h5>
+    </div>
+</div>
