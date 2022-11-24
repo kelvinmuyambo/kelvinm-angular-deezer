@@ -131,5 +131,10 @@
       }
     }
   },
-  "defaultProject": "kelvinm-angular-deezer"
+  "defaultProject": "kelvinm-angular-deezer",
+  "cli": {
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
+  }
 }

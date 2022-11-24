@@ -3,6 +3,7 @@ import { Artist, Pagination, Track } from '../../models';
 import { DeezerApiService } from 'src/app/services/deezer-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationRequest } from 'src/app/models/pagination-request.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-artist-search',
@@ -11,6 +12,7 @@ import { PaginationRequest } from 'src/app/models/pagination-request.interface';
 })
 export class ArtistSearchComponent implements OnInit {
   page: Pagination<Artist> | undefined;
+  page$: Observable<Pagination<Artist>> = new Observable();
   showArtist = false;
   request: PaginationRequest = {
     index: 0,
@@ -31,11 +33,11 @@ export class ArtistSearchComponent implements OnInit {
     });
   }
 
-  async submitSearch(search: string): Promise<void> {
+  submitSearch(search: string): void {
     this.router.navigate(['/']);
     this.showArtist = false;
     this.searchStr = search;
-    this.page = await this.service.findArtists(search, this.request);
+    this.page$ = this.service.findArtists(search, this.request);
   }
 
   select(artist: Artist): void {

@@ -2,48 +2,43 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Album, Artist, Pagination, Track } from '../models';
 import { PaginationRequest } from '../models/pagination-request.interface';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeezerApiService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
-  findArtists(search: string, request?: PaginationRequest): Promise<Pagination<Artist>> {
+  findArtists(search: string, request?: PaginationRequest): Observable<Pagination<Artist>> {
     if (!search || search.trim().length < 3) {
       throw Error('Search query cannot be less that 2 characters');
     }
 
     const query = this.getRequestQueryParam(request);
-
-    // TODO: .toPromise() depricated with new versions of rxjs
     return this.httpClient
-      .get(`/api/search/artist/?q=${search}&${query}`)
-      .toPromise() as Promise<Pagination<Artist>>;
+      .get<Pagination<Artist>>(`/api/search/artist/?q=${search}&${query}`);
   }
 
-  getArtist(id: string): Promise<Artist> {
-    // TODO: .toPromise() depricated with new versions of rxjs
+  getArtist(id: string): Observable<Artist> {
     return this.httpClient
-      .get(`/api/artist/${id}`)
-      .toPromise() as Promise<Artist>;
+      .get<Artist>(`/api/artist/${id}`);
   }
 
-  getArtistTopTracks(id: string, limit = 10): Promise<Pagination<Track>> {
-    // TODO: .toPromise() depricated with new versions of rxjs
+  getArtistTopTracks(id: string, limit = 10): Observable<Track[]> {
     return this.httpClient
-      .get(`/api/artist/${id}/top?limit=${limit}`)
-      .toPromise() as Promise<Pagination<Track>>;
+      .get<Pagination<Track>>(`/api/artist/${id}/top?limit=${limit}`)
+      .pipe(map(page => page.data));
   }
 
-  getArtistAlbums(id: string): Promise<Pagination<Album>> {
-    // TODO: .toPromise() depricated with new versions of rxjs
+  getArtistAlbums(id: string): Observable<Album[]> {
     return this.httpClient
-      .get(`/api/artist/${id}/albums`)
-      .toPromise() as Promise<Pagination<Album>>;
+      .get<Pagination<Album>>(`/api/artist/${id}/albums`)
+      .pipe(map(page => page.data));
   }
 
-  getRequestQueryParam(request?: any): string{
+  getRequestQueryParam(request?: any): string {
     if (!request) { return ''; }
     return Object.keys(request).map(key => `${key}=${request[key]}`).join('&');
   }

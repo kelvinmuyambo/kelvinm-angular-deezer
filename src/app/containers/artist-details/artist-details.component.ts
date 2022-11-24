@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Album, Artist, Track } from 'src/app/models';
+import { Observable } from 'rxjs';
+import { Album, Artist, Pagination, Track } from 'src/app/models';
 import { DeezerApiService } from 'src/app/services/deezer-api.service';
 
 @Component({
@@ -9,9 +10,9 @@ import { DeezerApiService } from 'src/app/services/deezer-api.service';
   styleUrls: ['./artist-details.component.scss'],
 })
 export class ArtistDetailsComponent implements OnInit {
-  artist: Artist | undefined;
-  tracks: Track[] = [];
-  albums: Album[] = [];
+  artist$: Observable<Artist> | undefined;
+  tracks$: Observable<Track[]> = new Observable();
+  albums$: Observable<Album[]> = new Observable();
 
   constructor(
     private route: ActivatedRoute,
@@ -31,8 +32,8 @@ export class ArtistDetailsComponent implements OnInit {
       this.service.getArtistTopTracks(id, 5),
       this.service.getArtistAlbums(id),
     ]);
-    this.artist = data[0];
-    this.tracks = data[1].data;
-    this.albums = data[2].data;
+    this.artist$ = data[0];
+    this.tracks$ = data[1];
+    this.albums$ = data[2];
   }
 }
