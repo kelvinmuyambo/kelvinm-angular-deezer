@@ -1,4 +1,4 @@
-# DVT Assessment - Deezer Angular Application
+# Deezer Angular Application
 
 ## Pre-Requisites
 - Node v12

@@ -16,6 +16,10 @@ import { RouterModule } from '@angular/router';
 import { AlbumsListComponent } from './components/albums-list/albums-list.component';
 import { CountPipe } from './pipes/count.pipe';
 import { DurationPipe } from './pipes/duration.pipe';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -36,7 +40,9 @@ import { DurationPipe } from './pipes/duration.pipe';
     HttpClientModule,
     NgbModule,
     NgbPaginationModule,
-    RouterModule
+    RouterModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [
     DeezerApiService,
